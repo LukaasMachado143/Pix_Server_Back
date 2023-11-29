@@ -1,0 +1,29 @@
+{
+  "name": "pix_server_back",
+  "version": "1.0.0",
+  "description": "API para sistema de pix, com objetivo de estudar conceitos em back-end",
+  "main": "server.ts",
+  "scripts": {
+    "test": "."
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LukaasMachado143/Pix_Server_Back.git"
+  },
+  "keywords": [
+    "NodeJs",
+    "JavaScript",
+    "TypeScript",
+    "API",
+    "RestFull",
+    "Rest",
+    "Prisma",
+    "Postgres",
+    "Tsup",
+    "Tsx",
+    "Swagger Docs",
+    "Jsonwebtoken"
+  ],
+  "author": "Lucas Machado",
+  "license": "ISC"
+}
