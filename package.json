@@ -25,5 +25,16 @@
     "Jsonwebtoken"
   ],
   "author": "Lucas Machado",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^5.6.0",
+    "fastify": "^4.24.3"
+  },
+  "devDependencies": {
+    "@fastify/cors": "^8.4.1",
+    "prisma": "^5.6.0",
+    "tsup": "^8.0.1",
+    "tsx": "^4.6.0",
+    "typescript": "^5.3.2"
+  }
 }
