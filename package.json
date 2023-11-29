@@ -4,7 +4,7 @@
   "description": "API para sistema de pix, com objetivo de estudar conceitos em back-end",
   "main": "server.ts",
   "scripts": {
-    "test": "."
+    "dev": "tsx watch src/server.ts"
   },
   "repository": {
     "type": "git",
