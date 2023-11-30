@@ -6,6 +6,8 @@ import { CreatedUserResponseDTO } from "../Core/@types/DTO/Response/CreatedUserR
 import { GeneralResponse } from "../Core/@types/GeneralResponse";
 import { hash, compare } from "bcrypt";
 import { LoginRequestDTO } from "../Core/@types/DTO/Request/LoginRequestDTO";
+import { sign } from "jsonwebtoken";
+import { LoginResponseDTO } from "../Core/@types/DTO/Response/LoginResponseDTO";
 
 export class UserService implements IUserService {
   private _repository: IUserRepository = new UserRepository();
@@ -51,8 +53,14 @@ export class UserService implements IUserService {
       success: false,
     };
 
+    const secretKey = process.env.SECRET_KEY;
+    if (!secretKey) {
+      response.message = "SRCRET_KEY pendente !";
+      return response;
+    }
+
     const email: string = loginData.email;
-    let user: User | null = await this._repository.findByEmail(email);
+    const user: User | null = await this._repository.findByEmail(email);
     if (!user) {
       response.message = "Email ou senha inválido, tente novamente !";
       return response;
@@ -64,9 +72,19 @@ export class UserService implements IUserService {
       return response;
     }
 
+    const token = sign(user, secretKey, {
+      subject: user.id,
+      expiresIn: "20s",
+    });
+    if (!token) {
+      response.message = "Problemas ao gerar token, tente novamente !";
+      return response;
+    }
+
+    const responseData: LoginResponseDTO = { email: user.email, token };
     response.message = "Logado com sucesso !";
     response.success = true;
-    response.data = user;
+    response.data = responseData;
     return response;
   }
 }
