@@ -34,4 +34,11 @@ export class UserController {
       replay.send({ message: error });
     }
   }
+  async teste(request: FastifyRequest, replay: FastifyReply) {
+    try {
+      replay.send({ message: "Autorizado" });
+    } catch (error) {
+      replay.send({ message: error });
+    }
+  }
 }
