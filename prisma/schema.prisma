@@ -11,5 +11,6 @@ model User {
   id       String @id() @default(uuid())
   email    String @unique
   name     String @unique
+  pixKey     String @unique
   password String
 }
