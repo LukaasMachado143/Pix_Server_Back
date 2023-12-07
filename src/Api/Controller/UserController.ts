@@ -4,6 +4,7 @@ import { IUserService } from "../../Core/Interfaces/Service/IUserService";
 import { User } from "@prisma/client";
 import { GeneralResponse } from "../../Core/@types/GeneralResponse";
 import { LoginRequestDTO } from "../../Core/@types/DTO/Request/LoginRequestDTO";
+import { UpdateRequestDTO } from "../../Core/@types/DTO/Request/UpdateRequestDTO";
 
 export class UserController {
   async createUser(
@@ -34,9 +35,17 @@ export class UserController {
       replay.send({ message: error });
     }
   }
-  async teste(request: FastifyRequest, replay: FastifyReply) {
+
+  async update(
+    request: FastifyRequest<{ Body: UpdateRequestDTO; Params: { id: string } }>,
+    replay: FastifyReply
+  ) {
     try {
-      replay.send({ message: "Autorizado" });
+      const service: IUserService = new UserService();
+      const data: UpdateRequestDTO = request.body;
+      const id: string = request.params.id;
+      const response: GeneralResponse = await service.update(id, data);
+      replay.send(response);
     } catch (error) {
       replay.send({ message: error });
     }

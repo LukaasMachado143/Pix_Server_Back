@@ -8,6 +8,7 @@ import { hash, compare } from "bcrypt";
 import { LoginRequestDTO } from "../Core/@types/DTO/Request/LoginRequestDTO";
 import { sign } from "jsonwebtoken";
 import { LoginResponseDTO } from "../Core/@types/DTO/Response/LoginResponseDTO";
+import { UpdateRequestDTO } from "../Core/@types/DTO/Request/UpdateRequestDTO";
 
 export class UserService implements IUserService {
   private _repository: IUserRepository = new UserRepository();
@@ -18,6 +19,11 @@ export class UserService implements IUserService {
       message: "",
       success: false,
     };
+
+    if (!userData) {
+      response.message = "Dados pendentes !";
+      return response;
+    }
 
     const email: string = userData.email;
     let user: User | null = await this._repository.findByEmail(email);
@@ -53,9 +59,14 @@ export class UserService implements IUserService {
       success: false,
     };
 
+    if (!loginData) {
+      response.message = "Dados pendentes !";
+      return response;
+    }
+
     const secretKey = process.env.SECRET_KEY;
     if (!secretKey) {
-      response.message = "SRCRET_KEY pendente !";
+      response.message = "SECRET_KEY pendente !";
       return response;
     }
 
@@ -74,7 +85,7 @@ export class UserService implements IUserService {
 
     const token = sign(user, secretKey, {
       subject: user.id,
-      expiresIn: "20s",
+      expiresIn: "60s",
     });
     if (!token) {
       response.message = "Problemas ao gerar token, tente novamente !";
@@ -85,6 +96,32 @@ export class UserService implements IUserService {
     response.message = "Logado com sucesso !";
     response.success = true;
     response.data = responseData;
+    return response;
+  }
+  async update(id: string, data: UpdateRequestDTO): Promise<GeneralResponse> {
+    const response: GeneralResponse = {
+      message: "",
+      success: false,
+    };
+    if (!id || !data) {
+      response.message = "Dados pendentes !";
+      return response;
+    }
+
+    const user: User | null = await this._repository.findById(id);
+    if (!user) {
+      response.message = "User not found !";
+      return response;
+    }
+    const updatedData: UpdateRequestDTO = {
+      email: data.email ?? user.email,
+      name: data.name ?? user.name,
+      pixKey: data.pixKey ?? user.pixKey,
+    };
+    await this._repository.update(id, updatedData);
+
+    response.message = "Updated Successfully !";
+    response.success = true;
     return response;
   }
 }

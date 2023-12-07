@@ -19,7 +19,7 @@ export function CheckToken(
 
   const secretKey = process.env.SECRET_KEY;
   if (!secretKey) {
-    response.message = "SRCRET_KEY pendente !";
+    response.message = "SECRET_KEY pendente !";
     return reply.code(401).send(response);
   }
 

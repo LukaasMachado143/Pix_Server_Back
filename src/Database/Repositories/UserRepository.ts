@@ -23,13 +23,20 @@ export class UserRepository implements IUserRepository {
   delete(id: string): Promise<any> {
     throw new Error("Method not implemented.");
   }
-  update(id: string, data: any): Promise<any> {
-    throw new Error("Method not implemented.");
+  async update(id: string, data: any): Promise<User> {
+    return await prisma.user.update({
+      where: { id },
+      data: { email: data.email, name: data.name, pixKey: data.pixKey },
+    });
   }
   findAll(): Promise<any> {
     throw new Error("Method not implemented.");
   }
-  findById(id: string): Promise<any> {
-    throw new Error("Method not implemented.");
+  async findById(id: string): Promise<User | null> {
+    return await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
   }
 }
