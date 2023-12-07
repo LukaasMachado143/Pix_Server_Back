@@ -5,6 +5,7 @@ import { User } from "@prisma/client";
 import { GeneralResponse } from "../../Core/@types/GeneralResponse";
 import { LoginRequestDTO } from "../../Core/@types/DTO/Request/LoginRequestDTO";
 import { UpdateRequestDTO } from "../../Core/@types/DTO/Request/UpdateRequestDTO";
+import { UpdatePasswordRequestDTO } from "../../Core/@types/DTO/Request/UpdatePasswordRequestDTO";
 
 export class UserController {
   async createUser(
@@ -45,6 +46,20 @@ export class UserController {
       const data: UpdateRequestDTO = request.body;
       const id: string = request.params.id;
       const response: GeneralResponse = await service.update(id, data);
+      replay.send(response);
+    } catch (error) {
+      replay.send({ message: error });
+    }
+  }
+  async updatePassword(
+    request: FastifyRequest<{ Body: UpdatePasswordRequestDTO; Params: { id: string } }>,
+    replay: FastifyReply
+  ) {
+    try {
+      const service: IUserService = new UserService();
+      const data: UpdatePasswordRequestDTO = request.body;
+      const id: string = request.params.id;
+      const response: GeneralResponse = await service.updatePassword(id, data);
       replay.send(response);
     } catch (error) {
       replay.send({ message: error });

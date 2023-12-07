@@ -3,6 +3,12 @@ import { prisma } from "../config/dbConfigs";
 import { IUserRepository } from "../../Core/Interfaces/Repository/IUserRepository";
 
 export class UserRepository implements IUserRepository {
+  async updatePassword(id: string, newPassword: string): Promise<User> {
+    return await prisma.user.update({
+      where: { id },
+      data: { password: newPassword },
+    });
+  }
   async findByName(name: string): Promise<User | null> {
     return await prisma.user.findUnique({
       where: {

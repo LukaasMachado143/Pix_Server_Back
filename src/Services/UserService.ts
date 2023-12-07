@@ -9,6 +9,7 @@ import { LoginRequestDTO } from "../Core/@types/DTO/Request/LoginRequestDTO";
 import { sign } from "jsonwebtoken";
 import { LoginResponseDTO } from "../Core/@types/DTO/Response/LoginResponseDTO";
 import { UpdateRequestDTO } from "../Core/@types/DTO/Request/UpdateRequestDTO";
+import { UpdatePasswordRequestDTO } from "../Core/@types/DTO/Request/UpdatePasswordRequestDTO";
 
 export class UserService implements IUserService {
   private _repository: IUserRepository = new UserRepository();
@@ -119,6 +120,41 @@ export class UserService implements IUserService {
       pixKey: data.pixKey ?? user.pixKey,
     };
     await this._repository.update(id, updatedData);
+
+    response.message = "Updated Successfully !";
+    response.success = true;
+    return response;
+  }
+
+  async updatePassword(
+    id: string,
+    data: UpdatePasswordRequestDTO
+  ): Promise<GeneralResponse> {
+    const response: GeneralResponse = {
+      message: "",
+      success: false,
+    };
+
+    if (!id || !data) {
+      response.message = "Dados pendentes !";
+      return response;
+    }
+
+    const user: User | null = await this._repository.findById(id);
+    if (!user) {
+      response.message = "User not found !";
+      return response;
+    }
+
+    const checkPassword = await compare(data.oldPassword, user.password);
+    if (!checkPassword) {
+      response.message = "Senha inválida, tente novamente !";
+      return response;
+    }
+
+    const passworHash = await hash(data.newPassword, 10);
+
+    await this._repository.updatePassword(id, passworHash);
 
     response.message = "Updated Successfully !";
     response.success = true;

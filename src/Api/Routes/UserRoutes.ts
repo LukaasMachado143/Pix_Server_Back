@@ -11,4 +11,9 @@ export const UserRoutes = async (fastify: FastifyInstance) => {
     { preHandler: CheckToken },
     controller.update as any
   );
+  fastify.put(
+    "/updatePassword/:id",
+    { preHandler: CheckToken },
+    controller.updatePassword as any
+  );
 };
