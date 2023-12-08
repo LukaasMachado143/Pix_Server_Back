@@ -45,4 +45,11 @@ export class UserRepository implements IUserRepository {
       },
     });
   }
+  async findByPixKey(pixKey: string): Promise<User | null> {
+    return await prisma.user.findUnique({
+      where: {
+        pixKey,
+      },
+    });
+  }
 }

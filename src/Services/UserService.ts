@@ -40,6 +40,13 @@ export class UserService implements IUserService {
       return response;
     }
 
+    const pixKey: string = userData.pixKey;
+    user = await this._repository.findByPixKey(pixKey);
+    if (user) {
+      response.message = "Chave Pix já está em uso, tente outra !";
+      return response;
+    }
+
     const passworHash = await hash(userData.password, 10);
     const data: User = { ...userData, password: passworHash };
     const newUser: User = await this._repository.create(data);

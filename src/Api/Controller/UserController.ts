@@ -16,9 +16,11 @@ export class UserController {
       const service: IUserService = new UserService();
       const userData: User = request.body;
       const response: GeneralResponse = await service.createUser(userData);
+      const code = response.code;
       delete response.code;
-      replay.status(response.code ?? 200).send(response);
+      replay.status(code ?? 200).send(response);
     } catch (error) {
+      console.log(error);
       replay.send({ message: error });
     }
   }
@@ -52,7 +54,10 @@ export class UserController {
     }
   }
   async updatePassword(
-    request: FastifyRequest<{ Body: UpdatePasswordRequestDTO; Params: { id: string } }>,
+    request: FastifyRequest<{
+      Body: UpdatePasswordRequestDTO;
+      Params: { id: string };
+    }>,
     replay: FastifyReply
   ) {
     try {
