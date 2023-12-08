@@ -10,6 +10,7 @@ import { sign } from "jsonwebtoken";
 import { LoginResponseDTO } from "../Core/@types/DTO/Response/LoginResponseDTO";
 import { UpdateRequestDTO } from "../Core/@types/DTO/Request/UpdateRequestDTO";
 import { UpdatePasswordRequestDTO } from "../Core/@types/DTO/Request/UpdatePasswordRequestDTO";
+import { UserResponseDTO } from "../Core/@types/DTO/Response/UserResponseDTO";
 
 export class UserService implements IUserService {
   private _repository: IUserRepository = new UserRepository();
@@ -165,6 +166,33 @@ export class UserService implements IUserService {
 
     response.message = "Updated Successfully !";
     response.success = true;
+    return response;
+  }
+
+  async getUserByEmail(email: string): Promise<GeneralResponse> {
+    const response: GeneralResponse = {
+      message: "",
+      success: false,
+    };
+
+    if (!email) {
+      response.message = "Dados pendentes !";
+      return response;
+    }
+    const user: User | null = await this._repository.findByEmail(email);
+    if (!user) {
+      response.message = "Usuário não encontrado !";
+    } else {
+      const data: UserResponseDTO = {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        pixKey: user.pixKey,
+        balance: 0,
+        profileImageUrl: "",
+      };
+      response.data = data;
+    }
     return response;
   }
 }

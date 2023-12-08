@@ -70,4 +70,20 @@ export class UserController {
       replay.send({ message: error });
     }
   }
+
+  async getUser(
+    request: FastifyRequest<{
+      Params: { email: string };
+    }>,
+    replay: FastifyReply
+  ) {
+    try {
+      const service: IUserService = new UserService();
+      const email: string = request.params.email;
+      const response: GeneralResponse = await service.getUserByEmail(email);
+      replay.send(response);
+    } catch (error) {
+      replay.send({ message: error });
+    }
+  }
 }

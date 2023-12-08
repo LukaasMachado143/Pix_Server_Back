@@ -8,5 +8,9 @@ export interface IUserService {
   createUser(userData: User): Promise<GeneralResponse>;
   login(loginData: LoginRequestDTO): Promise<GeneralResponse>;
   update(id: string, data: UpdateRequestDTO): Promise<GeneralResponse>;
-  updatePassword(id: string, data: UpdatePasswordRequestDTO): Promise<GeneralResponse>;
+  updatePassword(
+    id: string,
+    data: UpdatePasswordRequestDTO
+  ): Promise<GeneralResponse>;
+  getUserByEmail(email: string): Promise<GeneralResponse>;
 }
