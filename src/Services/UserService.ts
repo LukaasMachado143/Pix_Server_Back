@@ -94,7 +94,7 @@ export class UserService implements IUserService {
 
     const token = sign(user, secretKey, {
       subject: user.id,
-      expiresIn: "60s",
+      expiresIn: "5m",
     });
     if (!token) {
       response.message = "Problemas ao gerar token, tente novamente !";
@@ -188,7 +188,7 @@ export class UserService implements IUserService {
         email: user.email,
         name: user.name,
         pixKey: user.pixKey,
-        balance: 0,
+        balance: 2500,
         profileImageUrl: "",
       };
       response.data = data;
