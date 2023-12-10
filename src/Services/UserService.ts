@@ -94,7 +94,7 @@ export class UserService implements IUserService {
 
     const token = sign(user, secretKey, {
       subject: user.id,
-      expiresIn: "5m",
+      expiresIn: "60s",
     });
     if (!token) {
       response.message = "Problemas ao gerar token, tente novamente !";
