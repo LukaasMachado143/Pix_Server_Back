@@ -13,4 +13,5 @@ export interface IUserService {
     data: UpdatePasswordRequestDTO
   ): Promise<GeneralResponse>;
   getUserByEmail(email: string): Promise<GeneralResponse>;
+  getAllUsers(id: string): Promise<GeneralResponse>;
 }

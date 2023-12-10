@@ -126,6 +126,7 @@ export class UserService implements IUserService {
       email: data.email ?? user.email,
       name: data.name ?? user.name,
       pixKey: data.pixKey ?? user.pixKey,
+      phone: data.phone ?? user.phone,
     };
     await this._repository.update(id, updatedData);
 
@@ -189,10 +190,36 @@ export class UserService implements IUserService {
         name: user.name,
         pixKey: user.pixKey,
         balance: user.balance,
+        phone: user.phone,
         profileImageUrl: "",
       };
       response.data = data;
     }
+    return response;
+  }
+
+  async getAllUsers(id: string): Promise<GeneralResponse> {
+    const response: GeneralResponse = {
+      message: "",
+      success: false,
+    };
+
+    if (!id) {
+      response.message = "Dados pendentes !";
+      return response;
+    }
+    const users: User[] = await this._repository.findAll();
+    const filteredUsers: User[] = users.filter((user) => user.id !== id);
+    const mappedUsers: UserResponseDTO[] = filteredUsers.map((user) => ({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      pixKey: user.pixKey,
+      phone: user.phone,
+    }));
+
+    response.data = mappedUsers;
+    response.success = true;
     return response;
   }
 }

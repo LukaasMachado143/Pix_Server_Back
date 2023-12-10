@@ -32,11 +32,16 @@ export class UserRepository implements IUserRepository {
   async update(id: string, data: any): Promise<User> {
     return await prisma.user.update({
       where: { id },
-      data: { email: data.email, name: data.name, pixKey: data.pixKey },
+      data: {
+        email: data.email,
+        name: data.name,
+        pixKey: data.pixKey,
+        phone: data.phone,
+      },
     });
   }
-  findAll(): Promise<any> {
-    throw new Error("Method not implemented.");
+  async findAll(): Promise<User[]> {
+    return await prisma.user.findMany();
   }
   async findById(id: string): Promise<User | null> {
     return await prisma.user.findUnique({

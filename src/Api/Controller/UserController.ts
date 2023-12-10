@@ -86,4 +86,19 @@ export class UserController {
       replay.send({ message: error });
     }
   }
+  async getAllUsers(
+    request: FastifyRequest<{
+      Params: { id: string };
+    }>,
+    replay: FastifyReply
+  ) {
+    try {
+      const service: IUserService = new UserService();
+      const id: string = request.params.id;
+      const response: GeneralResponse = await service.getAllUsers(id);
+      replay.send(response);
+    } catch (error) {
+      replay.send({ message: error });
+    }
+  }
 }

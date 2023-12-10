@@ -3,6 +3,7 @@ export type UserResponseDTO = {
   email: string;
   name: string;
   pixKey: string;
+  phone: string;
   profileImageUrl?: string;
   balance?: number;
 };
