@@ -12,6 +12,7 @@ model User {
   email    String @unique
   name     String @unique
   pixKey   String @unique
-  balance  Float @default(1000)
+  phone    String
+  balance  Float  @default(1000)
   password String
 }
