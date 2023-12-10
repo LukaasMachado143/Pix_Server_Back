@@ -188,7 +188,7 @@ export class UserService implements IUserService {
         email: user.email,
         name: user.name,
         pixKey: user.pixKey,
-        balance: 2500,
+        balance: user.balance,
         profileImageUrl: "",
       };
       response.data = data;
