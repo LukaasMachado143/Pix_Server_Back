@@ -8,11 +8,23 @@ datasource db {
 }
 
 model User {
-  id       String @id() @default(uuid())
-  email    String @unique
-  name     String @unique
-  pixKey   String @unique
-  phone    String
-  balance  Float  @default(1000)
-  password String
+  id                String     @id() @default(uuid())
+  email             String     @unique
+  name              String     @unique
+  pixKey            String     @unique
+  phone             String
+  balance           Float      @default(1000)
+  password          String
+  transfersSent     Transfer[] @relation("TransfersSent")
+  transfersReceived Transfer[] @relation("TransfersReceived")
+}
+
+model Transfer {
+  id             String   @id() @default(uuid())
+  date           DateTime @default(now())
+  senderPixKey   String
+  receiverPixKey String
+  value          Float
+  sender         User     @relation("TransfersSent", fields: [senderPixKey], references: [pixKey])
+  receiver       User     @relation("TransfersReceived", fields: [receiverPixKey], references: [pixKey])
 }
