@@ -1,8 +1,8 @@
 import { User } from "@prisma/client";
 import { GeneralResponse } from "../../@types/GeneralResponse";
-import { LoginRequestDTO } from "../../@types/DTO/Request/LoginRequestDTO";
-import { UpdateRequestDTO } from "../../@types/DTO/Request/UpdateRequestDTO";
-import { UpdatePasswordRequestDTO } from "../../@types/DTO/Request/UpdatePasswordRequestDTO";
+import { LoginRequestDTO } from "../../@types/DTO/Request/User/LoginRequestDTO";
+import { UpdateRequestDTO } from "../../@types/DTO/Request/User/UpdateRequestDTO";
+import { UpdatePasswordRequestDTO } from "../../@types/DTO/Request/User/UpdatePasswordRequestDTO";
 
 export interface IUserService {
   createUser(userData: User): Promise<GeneralResponse>;
@@ -14,4 +14,6 @@ export interface IUserService {
   ): Promise<GeneralResponse>;
   getUserByEmail(email: string): Promise<GeneralResponse>;
   getAllUsers(id: string): Promise<GeneralResponse>;
+  checkPixKey(pixKey: string): Promise<boolean>;
+  updateBalance(pixKey: string, value: number, isSender: boolean): Promise<boolean>;
 }
