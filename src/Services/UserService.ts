@@ -91,10 +91,11 @@ export class UserService implements IUserService {
       response.message = "Email ou senha inválido, tente novamente !";
       return response;
     }
-
+    
+    const expiresIn = process.env.TOKEN_TIME;
     const token = sign(user, secretKey, {
       subject: user.id,
-      expiresIn: "60s",
+      expiresIn,
     });
     if (!token) {
       response.message = "Problemas ao gerar token, tente novamente !";
@@ -134,7 +135,6 @@ export class UserService implements IUserService {
     response.success = true;
     return response;
   }
-
   async updatePassword(
     id: string,
     data: UpdatePasswordRequestDTO
@@ -169,7 +169,6 @@ export class UserService implements IUserService {
     response.success = true;
     return response;
   }
-
   async getUserByEmail(email: string): Promise<GeneralResponse> {
     const response: GeneralResponse = {
       message: "",
@@ -197,7 +196,6 @@ export class UserService implements IUserService {
     }
     return response;
   }
-
   async getAllUsers(id: string): Promise<GeneralResponse> {
     const response: GeneralResponse = {
       message: "",
