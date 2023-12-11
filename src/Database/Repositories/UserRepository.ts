@@ -26,8 +26,8 @@ export class UserRepository implements IUserRepository {
   async create(data: User): Promise<User> {
     return await prisma.user.create({ data: data });
   }
-  delete(id: string): Promise<any> {
-    throw new Error("Method not implemented.");
+  async delete(id: string): Promise<void> {
+    await prisma.user.delete({ where: { id } });
   }
   async update(id: string, data: any): Promise<User> {
     return await prisma.user.update({
