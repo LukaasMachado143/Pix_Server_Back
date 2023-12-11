@@ -148,4 +148,33 @@ export class TransferService implements ITransferService {
 
     return response;
   }
+
+  async getChartHistory(pixKey: string): Promise<GeneralResponse> {
+    const response: GeneralResponse = {
+      message: "",
+      success: false,
+    };
+
+    if (!pixKey) {
+      response.message = "Dados pendentes !";
+      return response;
+    }
+
+    const sended: Transfer[] = await this._repository.getSendedTransfers(
+      pixKey
+    );
+    const sendedMapped = sended.map((transfer) => transfer.value);
+    const received: Transfer[] = await this._repository.getReceivedTransfers(
+      pixKey
+    );
+    const receivedMapped = received.map((transfer) => transfer.value);
+    response.message = "ok";
+    response.data = {
+      sended: sendedMapped,
+      received: receivedMapped,
+    };
+    response.success = true;
+
+    return response;
+  }
 }
