@@ -41,4 +41,23 @@ export class TransferController {
       replay.send({ message: error });
     }
   }
+
+  async getChartAccumulator(
+    request: FastifyRequest<{ Params: { pixKey: string } }>,
+    replay: FastifyReply
+  ) {
+    try {
+      const service: ITransferService = new TransferService();
+      const pixKey = request.params.pixKey;
+      const response: GeneralResponse = await service.getChartAccumulator(
+        pixKey
+      );
+      const code = response.code;
+      delete response.code;
+      replay.status(code ?? 200).send(response);
+    } catch (error) {
+      console.log(error);
+      replay.send({ message: error });
+    }
+  }
 }

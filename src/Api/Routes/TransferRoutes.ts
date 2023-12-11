@@ -15,4 +15,10 @@ export const TransferRoutes = async (fastify: FastifyInstance) => {
     { preHandler: CheckToken },
     controller.getTransfers as any
   );
+
+  fastify.get(
+    "/chart/accumulator/:pixKey",
+    { preHandler: CheckToken },
+    controller.getChartAccumulator as any
+  );
 };

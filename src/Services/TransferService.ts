@@ -23,7 +23,7 @@ export class TransferService implements ITransferService {
       return response;
     }
 
-    if(data.receiverPixKey == data.senderPixKey){
+    if (data.receiverPixKey == data.senderPixKey) {
       response.message = "As chaves são iguais !";
       return response;
     }
@@ -100,7 +100,7 @@ export class TransferService implements ITransferService {
       transfers = await this._repository.getSendedTransfers(pixKey);
     } else if (type == "received") {
       transfers = await this._repository.getReceivedTransfers(pixKey);
-    }else{
+    } else {
       response.message = "Tipo inexistente !";
       return response;
     }
@@ -111,6 +111,39 @@ export class TransferService implements ITransferService {
     );
     response.message = "sended";
     response.data = mappedTransfers;
+    response.success = true;
+
+    return response;
+  }
+
+  async getChartAccumulator(pixKey: string): Promise<GeneralResponse> {
+    const response: GeneralResponse = {
+      message: "",
+      success: false,
+    };
+
+    if (!pixKey) {
+      response.message = "Dados pendentes !";
+      return response;
+    }
+
+    const sended: Transfer[] = await this._repository.getSendedTransfers(
+      pixKey
+    );
+    const sendedAcc = sended.reduce((acc, cur) => {
+      return (acc += cur.value);
+    }, 0);
+    const received: Transfer[] = await this._repository.getReceivedTransfers(
+      pixKey
+    );
+    const receivedAcc = received.reduce((acc, cur) => {
+      return (acc += cur.value);
+    }, 0);
+    response.message = "ok";
+    response.data = {
+      sended: sendedAcc,
+      received: receivedAcc,
+    };
     response.success = true;
 
     return response;
