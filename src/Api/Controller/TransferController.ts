@@ -22,14 +22,17 @@ export class TransferController {
     }
   }
 
-  async getSendedTransfers(
-    request: FastifyRequest<{ Params: { pixKey: string } }>,
+  async getTransfers(
+    request: FastifyRequest<{ Params: { pixKey: string; type: string } }>,
     replay: FastifyReply
   ) {
     try {
       const service: ITransferService = new TransferService();
-      const pixKey: string = request.params.pixKey;
-      const response: GeneralResponse = await service.getSendedTransfers(pixKey);
+      const { type, pixKey } = request.params;
+      const response: GeneralResponse = await service.getTransfers(
+        type,
+        pixKey
+      );
       const code = response.code;
       delete response.code;
       replay.status(code ?? 200).send(response);

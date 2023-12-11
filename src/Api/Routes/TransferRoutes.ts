@@ -11,8 +11,8 @@ export const TransferRoutes = async (fastify: FastifyInstance) => {
   );
 
   fastify.get(
-    "/sended/:pixKey",
+    "/:type/:pixKey",
     { preHandler: CheckToken },
-    controller.getSendedTransfers as any
+    controller.getTransfers as any
   );
 };

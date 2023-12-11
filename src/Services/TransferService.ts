@@ -18,8 +18,13 @@ export class TransferService implements ITransferService {
       success: false,
     };
 
-    if (!data || !data.receiverPixKey || !data.receiverPixKey || !data.value) {
+    if (!data || !data.receiverPixKey || !data.senderPixKey || !data.value) {
       response.message = "Dados pendentes";
+      return response;
+    }
+
+    if(data.receiverPixKey == data.senderPixKey){
+      response.message = "As chaves são iguais !";
       return response;
     }
 
@@ -79,21 +84,26 @@ export class TransferService implements ITransferService {
     return response;
   }
 
-  async getSendedTransfers(pixKey: string): Promise<GeneralResponse> {
+  async getTransfers(type: string, pixKey: string): Promise<GeneralResponse> {
     const response: GeneralResponse = {
       message: "",
       success: false,
     };
 
-    if (!pixKey) {
+    if (!pixKey || !type) {
       response.message = "Dados pendentes !";
       return response;
     }
 
-    const transfers: Transfer[] = await this._repository.getSendedTransfers(
-      pixKey
-    );
-
+    let transfers: Transfer[] = [];
+    if (type == "sended") {
+      transfers = await this._repository.getSendedTransfers(pixKey);
+    } else if (type == "received") {
+      transfers = await this._repository.getReceivedTransfers(pixKey);
+    }else{
+      response.message = "Tipo inexistente !";
+      return response;
+    }
     const mappedTransfers: TransferListResponseDTO[] = transfers.map(
       (transfer) => {
         return { date: transfer.date, value: transfer.value };
