@@ -3,9 +3,9 @@ import { UserService } from "../../Services/UserService";
 import { IUserService } from "../../Core/Interfaces/Service/IUserService";
 import { User } from "@prisma/client";
 import { GeneralResponse } from "../../Core/@types/GeneralResponse";
-import { LoginRequestDTO } from "../../Core/@types/DTO/Request/LoginRequestDTO";
-import { UpdateRequestDTO } from "../../Core/@types/DTO/Request/UpdateRequestDTO";
-import { UpdatePasswordRequestDTO } from "../../Core/@types/DTO/Request/UpdatePasswordRequestDTO";
+import { LoginRequestDTO } from "../../Core/@types/DTO/Request/User/LoginRequestDTO";
+import { UpdateRequestDTO } from "../../Core/@types/DTO/Request/User/UpdateRequestDTO";
+import { UpdatePasswordRequestDTO } from "../../Core/@types/DTO/Request/User/UpdatePasswordRequestDTO";
 
 export class UserController {
   async createUser(

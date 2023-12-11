@@ -57,4 +57,7 @@ export class UserRepository implements IUserRepository {
       },
     });
   }
+  async updateBalance(id: string, value: number): Promise<User> {
+    return await prisma.user.update({ where: { id }, data: { balance: value } });
+  }
 }

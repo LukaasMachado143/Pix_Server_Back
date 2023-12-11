@@ -6,4 +6,5 @@ export interface IUserRepository extends IGeneralRepository {
   findByEmail(email: string): Promise<User | null>;
   findByPixKey(pixKey: string): Promise<User | null>;
   updatePassword(id: string, newPassword: string): Promise<User>;
+  updateBalance(id: string,value: number): Promise<User>;
 }

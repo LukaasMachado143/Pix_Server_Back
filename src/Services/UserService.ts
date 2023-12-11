@@ -2,15 +2,15 @@ import { IUserRepository } from "../Core/Interfaces/Repository/IUserRepository";
 import { IUserService } from "../Core/Interfaces/Service/IUserService";
 import { User } from "@prisma/client";
 import { UserRepository } from "../Database/Repositories/UserRepository";
-import { CreatedUserResponseDTO } from "../Core/@types/DTO/Response/CreatedUserResponseDTO";
+import { CreatedUserResponseDTO } from "../Core/@types/DTO/Response/User/CreatedUserResponseDTO";
 import { GeneralResponse } from "../Core/@types/GeneralResponse";
 import { hash, compare } from "bcrypt";
-import { LoginRequestDTO } from "../Core/@types/DTO/Request/LoginRequestDTO";
+import { LoginRequestDTO } from "../Core/@types/DTO/Request/User/LoginRequestDTO";
 import { sign } from "jsonwebtoken";
-import { LoginResponseDTO } from "../Core/@types/DTO/Response/LoginResponseDTO";
-import { UpdateRequestDTO } from "../Core/@types/DTO/Request/UpdateRequestDTO";
-import { UpdatePasswordRequestDTO } from "../Core/@types/DTO/Request/UpdatePasswordRequestDTO";
-import { UserResponseDTO } from "../Core/@types/DTO/Response/UserResponseDTO";
+import { LoginResponseDTO } from "../Core/@types/DTO/Response/User/LoginResponseDTO";
+import { UpdateRequestDTO } from "../Core/@types/DTO/Request/User/UpdateRequestDTO";
+import { UpdatePasswordRequestDTO } from "../Core/@types/DTO/Request/User/UpdatePasswordRequestDTO";
+import { UserResponseDTO } from "../Core/@types/DTO/Response/User/UserResponseDTO";
 
 export class UserService implements IUserService {
   private _repository: IUserRepository = new UserRepository();
@@ -91,7 +91,7 @@ export class UserService implements IUserService {
       response.message = "Email ou senha inválido, tente novamente !";
       return response;
     }
-    
+
     const expiresIn = process.env.TOKEN_TIME;
     const token = sign(user, secretKey, {
       subject: user.id,
@@ -219,5 +219,30 @@ export class UserService implements IUserService {
     response.data = mappedUsers;
     response.success = true;
     return response;
+  }
+  async checkPixKey(pixKey: string): Promise<boolean> {
+    if (!pixKey) return false;
+    const user: User | null = await this._repository.findByPixKey(pixKey);
+    if (!user) return false;
+    return true;
+  }
+  async updateBalance(
+    pixKey: string,
+    value: number,
+    isSender: boolean
+  ): Promise<boolean> {
+    if (!pixKey || !value || value <= 0 || isSender == null) return false;
+
+    const user: User | null = await this._repository.findByPixKey(pixKey);
+    if (!user) return false;
+
+    let newValue: number = user.balance;
+    if (isSender) newValue -= value;
+    else newValue += value;
+
+    const updatedUser: User =  await this._repository.updateBalance(user.id, newValue);
+    if(!updatedUser) return false
+    
+    return true;
   }
 }
