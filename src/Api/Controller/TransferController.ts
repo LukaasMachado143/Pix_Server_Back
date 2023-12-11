@@ -21,4 +21,21 @@ export class TransferController {
       replay.send({ message: error });
     }
   }
+
+  async getSendedTransfers(
+    request: FastifyRequest<{ Params: { pixKey: string } }>,
+    replay: FastifyReply
+  ) {
+    try {
+      const service: ITransferService = new TransferService();
+      const pixKey: string = request.params.pixKey;
+      const response: GeneralResponse = await service.getSendedTransfers(pixKey);
+      const code = response.code;
+      delete response.code;
+      replay.status(code ?? 200).send(response);
+    } catch (error) {
+      console.log(error);
+      replay.send({ message: error });
+    }
+  }
 }

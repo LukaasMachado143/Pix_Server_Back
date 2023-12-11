@@ -4,10 +4,13 @@ import { ITransferRepository } from "../Core/Interfaces/Repository/ITransferRepo
 import { TransferRepository } from "../Database/Repositories/TransferRepository";
 import { IUserService } from "../Core/Interfaces/Service/IUserService";
 import { UserService } from "./UserService";
+import { ITransferService } from "../Core/Interfaces/Service/ITransferService";
+import { TransferListResponseDTO } from "../Core/@types/DTO/Response/Transfer/TransferListResponseDTO";
 
-export class TransferService implements TransferService {
+export class TransferService implements ITransferService {
   private _repository: ITransferRepository = new TransferRepository();
   private _userService: IUserService = new UserService();
+
   async createTransfer(data: Transfer): Promise<GeneralResponse> {
     const response: GeneralResponse = {
       code: 200,
@@ -71,6 +74,33 @@ export class TransferService implements TransferService {
     response.message = "Transferência realizada com sucesso !";
     response.code = 201;
     response.data = transfer;
+    response.success = true;
+
+    return response;
+  }
+
+  async getSendedTransfers(pixKey: string): Promise<GeneralResponse> {
+    const response: GeneralResponse = {
+      message: "",
+      success: false,
+    };
+
+    if (!pixKey) {
+      response.message = "Dados pendentes !";
+      return response;
+    }
+
+    const transfers: Transfer[] = await this._repository.getSendedTransfers(
+      pixKey
+    );
+
+    const mappedTransfers: TransferListResponseDTO[] = transfers.map(
+      (transfer) => {
+        return { date: transfer.date, value: transfer.value };
+      }
+    );
+    response.message = "sended";
+    response.data = mappedTransfers;
     response.success = true;
 
     return response;
