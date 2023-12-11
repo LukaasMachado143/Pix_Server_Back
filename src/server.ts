@@ -9,5 +9,5 @@ server.get("/", () => {
   return { message: "api is runnung" };
 });
 server.register(UserRoutes, { prefix: "/user" });
-server.register(TransferRoutes, { prefix: "/transfer" });
+server.register(TransferRoutes, { prefix: "/transfer" })
 server.listen({ port: 3000 });
