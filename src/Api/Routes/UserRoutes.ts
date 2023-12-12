@@ -16,6 +16,11 @@ export const UserRoutes = async (fastify: FastifyInstance) => {
     { preHandler: CheckToken },
     controller.updatePassword as any
   );
+  fastify.put(
+    "/updateBalance/:id/:value",
+    { preHandler: CheckToken },
+    controller.updateBalance as any
+  );
   fastify.get("/:email", { preHandler: CheckToken }, controller.getUser as any);
   fastify.get(
     "/list/:id",

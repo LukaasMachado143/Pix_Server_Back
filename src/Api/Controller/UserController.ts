@@ -101,4 +101,24 @@ export class UserController {
       replay.send({ message: error });
     }
   }
+
+  async updateBalance(
+    request: FastifyRequest<{
+      Params: { id: string; value: string };
+    }>,
+    replay: FastifyReply
+  ) {
+    try {
+      const service: IUserService = new UserService();
+      const id: string = request.params.id;
+      const value: number = parseFloat(request.params.value);
+      const response: GeneralResponse = await service.updateBalanceReal(
+        id,
+        value
+      );
+      replay.send(response);
+    } catch (error) {
+      replay.send({ message: error });
+    }
+  }
 }

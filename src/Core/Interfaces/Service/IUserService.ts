@@ -14,6 +14,11 @@ export interface IUserService {
   ): Promise<GeneralResponse>;
   getUserByEmail(email: string): Promise<GeneralResponse>;
   getAllUsers(id: string): Promise<GeneralResponse>;
+  updateBalanceReal(pixKey: string, value: number): Promise<GeneralResponse>;
   checkPixKey(pixKey: string): Promise<boolean>;
-  updateBalance(pixKey: string, value: number, isSender: boolean): Promise<boolean>;
+  updateBalance(
+    pixKey: string,
+    value: number,
+    isSender: boolean
+  ): Promise<boolean>;
 }

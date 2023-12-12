@@ -240,9 +240,45 @@ export class UserService implements IUserService {
     if (isSender) newValue -= value;
     else newValue += value;
 
-    const updatedUser: User =  await this._repository.updateBalance(user.id, newValue);
-    if(!updatedUser) return false
-    
+    const updatedUser: User = await this._repository.updateBalance(
+      user.id,
+      newValue
+    );
+    if (!updatedUser) return false;
+
     return true;
+  }
+  async updateBalanceReal(id: string, value: number): Promise<GeneralResponse> {
+    const response: GeneralResponse = {
+      message: "",
+      success: false,
+    };
+
+    if (!id || !value) {
+      response.message = "Dados pendentes !";
+      return response;
+    }
+
+    const user: User | null = await this._repository.findById(id);
+    if (!user) {
+      response.message = "Usuário não encontrado !";
+      return response;
+    }
+
+    const pixKey: string = user.pixKey;
+    const isUpdatedBalance: boolean = await this.updateBalance(
+      pixKey,
+      value,
+      false
+    );
+    if (!isUpdatedBalance) {
+      response.message =
+        "Problemas ao atualizar saldo do usuário, tente novamente !";
+      return response;
+    }
+
+    response.message = "Saldo atualizado com sucesso !";
+    response.success = true;
+    return response;
   }
 }
