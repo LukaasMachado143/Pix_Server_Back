@@ -40,7 +40,7 @@ export class TransferService implements ITransferService {
       data.receiverPixKey
     );
     if (!isExistReceiver) {
-      response.message = "Chave pix do remetente não existe !";
+      response.message = "Chave pix do recebedor não existe !";
       return response;
     }
 
@@ -49,7 +49,6 @@ export class TransferService implements ITransferService {
       response.message = "Problemas ao registrar transferência !";
       return response;
     }
-
     const senderUpdated: boolean = await this._userService.updateBalance(
       data.senderPixKey,
       data.value,
