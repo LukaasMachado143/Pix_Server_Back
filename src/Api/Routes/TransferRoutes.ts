@@ -27,4 +27,9 @@ export const TransferRoutes = async (fastify: FastifyInstance) => {
     { preHandler: CheckToken },
     controller.getChartHistory as any
   );
+  fastify.get(
+    "/chart/history/account/:pixKey",
+    { preHandler: CheckToken },
+    controller.getChartHistoryAccount as any
+  );
 };

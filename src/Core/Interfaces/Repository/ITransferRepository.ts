@@ -5,4 +5,5 @@ export interface ITransferRepository {
   delete(id: string): Promise<void>;
   getSendedTransfers(pixKey: string): Promise<Transfer[]>;
   getReceivedTransfers(pixKey: string): Promise<Transfer[]>;
+  getAllTransfers(): Promise<Transfer[]>;
 }

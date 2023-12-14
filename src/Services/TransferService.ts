@@ -6,6 +6,7 @@ import { IUserService } from "../Core/Interfaces/Service/IUserService";
 import { UserService } from "./UserService";
 import { ITransferService } from "../Core/Interfaces/Service/ITransferService";
 import { TransferListResponseDTO } from "../Core/@types/DTO/Response/Transfer/TransferListResponseDTO";
+import { ChartHistoryAccountDTO } from "../Core/@types/DTO/Response/Transfer/ChartHistoryAccountDTO";
 
 export class TransferService implements ITransferService {
   private _repository: ITransferRepository = new TransferRepository();
@@ -174,6 +175,39 @@ export class TransferService implements ITransferService {
     };
     response.success = true;
 
+    return response;
+  }
+
+  async getChartHistoryAccount(pixKey: string): Promise<GeneralResponse> {
+    const response: GeneralResponse = {
+      message: "",
+      success: false,
+    };
+
+    if (!pixKey) {
+      response.message = "Dados pendentes !";
+      return response;
+    }
+    const allTransfer: Transfer[] = await this._repository.getAllTransfers();
+    const allTransferFiltered: Transfer[] = allTransfer.filter(
+      (transfer) =>
+        transfer.senderPixKey == pixKey || transfer.receiverPixKey == pixKey
+    );
+    const mappedTransfers: ChartHistoryAccountDTO[] = allTransferFiltered.map(
+      (transfer) => {
+        const color: string =
+          transfer.senderPixKey == process.env.SYSTEM_PIX_SERVER_KEY
+            ? "blue"
+            : transfer.receiverPixKey == pixKey
+            ? "green"
+            : "red";
+        return { y: transfer.value, color };
+      }
+    );
+
+    response.data = mappedTransfers;
+    response.success = true;
+    response.message = "Histórico carregado com sucesso !";
     return response;
   }
 }

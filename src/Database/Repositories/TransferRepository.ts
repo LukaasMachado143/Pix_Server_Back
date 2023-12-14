@@ -3,6 +3,9 @@ import { prisma } from "../config/dbConfigs";
 import { ITransferRepository } from "../../Core/Interfaces/Repository/ITransferRepository";
 
 export class TransferRepository implements ITransferRepository {
+  async getAllTransfers(): Promise<Transfer[]> {
+    return await prisma.transfer.findMany();
+  }
   async getReceivedTransfers(pixKey: string): Promise<Transfer[]> {
     return await prisma.transfer.findMany({
       where: { receiverPixKey: pixKey },
