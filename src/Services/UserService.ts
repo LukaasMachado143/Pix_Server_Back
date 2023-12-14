@@ -206,8 +206,15 @@ export class UserService implements IUserService {
       response.message = "Dados pendentes !";
       return response;
     }
+
     const users: User[] = await this._repository.findAll();
-    const filteredUsers: User[] = users.filter((user) => user.id !== id);
+    const connectedUser = users.find((user) => user.id == id);
+    if (!connectedUser) {
+      response.message = "Usuário principal não encontrado !";
+      return response;
+    }
+
+    const filteredUsers: User[] = users.filter((user) => user.id !== id && user.pixKey != process.env.SYSTEM_PIX_SERVER_KEY);
     const mappedUsers: UserResponseDTO[] = filteredUsers.map((user) => ({
       id: user.id,
       email: user.email,
