@@ -37,6 +37,8 @@ export class UserRepository implements IUserRepository {
         name: data.name,
         pixKey: data.pixKey,
         phone: data.phone,
+        profileImageKey: data.profileImageKey,
+        profileImageUrl: data.profileImageUrl,
       },
     });
   }

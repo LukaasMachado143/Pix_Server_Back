@@ -3,6 +3,7 @@ import { GeneralResponse } from "../../@types/GeneralResponse";
 import { LoginRequestDTO } from "../../@types/DTO/Request/User/LoginRequestDTO";
 import { UpdateRequestDTO } from "../../@types/DTO/Request/User/UpdateRequestDTO";
 import { UpdatePasswordRequestDTO } from "../../@types/DTO/Request/User/UpdatePasswordRequestDTO";
+import { MultipartFile } from "@fastify/multipart";
 
 export interface IUserService {
   createUser(userData: User): Promise<GeneralResponse>;
@@ -21,4 +22,8 @@ export interface IUserService {
     value: number,
     isSender: boolean
   ): Promise<boolean>;
+  updateProfileImage(
+    id: string,
+    iamge: MultipartFile
+  ): Promise<GeneralResponse>;
 }

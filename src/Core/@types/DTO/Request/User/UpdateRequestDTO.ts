@@ -3,5 +3,6 @@ export type UpdateRequestDTO = {
   name?: string;
   pixKey?: string;
   phone?: string;
-  profileImage?: any;
+  profileImageKey?: string;
+  profileImageUrl?: string;
 };
