@@ -1,0 +1,111 @@
+{
+  "info": {
+    "title": "Pix Server Back end API",
+    "description": "Este é um exemplo de API RestFull, utilizado para aprender vários conceitos e uso de libs.",
+    "version": "1.0.0"
+  },
+  "externalDocs": {
+    "url": "https://swagger.io",
+    "description": "Find more info here"
+  },
+  "host": "localhost",
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "tags": [
+    { "name": "user", "description": "User related end-points" },
+    { "name": "transfer", "description": "Transfer related end-points" }
+  ],
+  "definitions": {
+    "User": {
+      "type": "object",
+      "required": ["id", "email"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "name": {
+          "type": "string"
+        },
+        "pixKey": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        " balance": {
+          "type": "number"
+        },
+        "password": {
+          "type": "string"
+        },
+        "transfersSent": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Transfer"
+          }
+        },
+        "transfersReceived": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Transfer"
+          }
+        },
+        "profileImageUrl": {
+          "type": "string"
+        },
+        "profileImageKey": {
+          "type": "string"
+        },
+        "createAt": {
+          "type": " string",
+          "format": "date-time"
+        },
+        "updateAt": {
+          "type": " string",
+          "format": "date-time"
+        }
+      }
+    },
+    "Transfer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "senderPixKey": {
+          "type": "string"
+        },
+        "receiverPixKey": {
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        },
+        "sender": {
+          "$ref": "#/definitions/User"
+        },
+        "receiver": {
+          " $ref": "#/definitions/User"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}
