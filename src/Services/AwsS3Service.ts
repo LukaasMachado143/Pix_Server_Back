@@ -39,6 +39,7 @@ export class AwsS3Service implements IAwsS3Service {
       const uploadedFile = await this.s3.upload(params).promise();
       return {
         key: uploadedFile.Key as string,
+        location: uploadedFile.Location as string,
       };
     } catch (error) {
       console.error("Erro ao fazer upload para o S3:", error);

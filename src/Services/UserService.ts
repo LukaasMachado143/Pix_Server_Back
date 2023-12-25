@@ -327,15 +327,17 @@ export class UserService implements IUserService {
     }
     const originalFileName: string = image.filename;
     const imageBuffer: Buffer = await image.toBuffer();
-    const { key } = await s3Instance.upload(imageBuffer, originalFileName);
+    const { key, location } = await s3Instance.upload(
+      imageBuffer,
+      originalFileName
+    );
+    data.profileImageUrl = location;
     data.profileImageKey = key;
-    const url = await s3Instance.getSignedUrl(key);
-    response.data = url;
-    // data.profileImageUrl = url;
 
-    // await this._repository.update(user.id, data);
+    await this._repository.update(user.id, data);
 
-    response.message = "Imagme alterada com sucesso !";
+    response.data = { key, location };
+    response.message = "Imagem alterada com sucesso !";
     response.success = true;
     return response;
   }
