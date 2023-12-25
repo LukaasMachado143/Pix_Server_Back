@@ -6,6 +6,7 @@ import { GeneralResponse } from "../../Core/@types/GeneralResponse";
 import { LoginRequestDTO } from "../../Core/@types/DTO/Request/User/LoginRequestDTO";
 import { UpdateRequestDTO } from "../../Core/@types/DTO/Request/User/UpdateRequestDTO";
 import { UpdatePasswordRequestDTO } from "../../Core/@types/DTO/Request/User/UpdatePasswordRequestDTO";
+import { Multipart, MultipartFile } from "@fastify/multipart";
 
 export class UserController {
   async createUser(
@@ -53,6 +54,7 @@ export class UserController {
       replay.send({ message: error });
     }
   }
+
   async updatePassword(
     request: FastifyRequest<{
       Body: UpdatePasswordRequestDTO;
@@ -86,6 +88,7 @@ export class UserController {
       replay.send({ message: error });
     }
   }
+
   async getAllUsers(
     request: FastifyRequest<{
       Params: { id: string };
@@ -115,6 +118,27 @@ export class UserController {
       const response: GeneralResponse = await service.updateBalanceReal(
         id,
         value
+      );
+      replay.send(response);
+    } catch (error) {
+      replay.send({ message: error });
+    }
+  }
+
+  async updateProfileImage(
+    request: FastifyRequest<{
+      Body: Promise<MultipartFile>;
+      Params: { id: string };
+    }>,
+    replay: FastifyReply
+  ) {
+    try {
+      const service: IUserService = new UserService();
+      const id: string = request.params.id;
+      const image: MultipartFile = await request.file();
+      const response: GeneralResponse = await service.updateProfileImage(
+        id,
+        image
       );
       replay.send(response);
     } catch (error) {

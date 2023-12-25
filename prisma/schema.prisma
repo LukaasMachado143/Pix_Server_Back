@@ -17,6 +17,10 @@ model User {
   password          String
   transfersSent     Transfer[] @relation("TransfersSent")
   transfersReceived Transfer[] @relation("TransfersReceived")
+  profileImageUrl   String    @default("https://th.bing.com/th/id/OIP.hcRhDT8KVqzySjYJmBhlzgHaHa?rs=1&pid=ImgDetMain")
+  profileImageKey   String?
+  createAt          DateTime   @default(now())
+  updateAt          DateTime?  @updatedAt
 }
 
 model Transfer {

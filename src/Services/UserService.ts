@@ -11,6 +11,9 @@ import { LoginResponseDTO } from "../Core/@types/DTO/Response/User/LoginResponse
 import { UpdateRequestDTO } from "../Core/@types/DTO/Request/User/UpdateRequestDTO";
 import { UpdatePasswordRequestDTO } from "../Core/@types/DTO/Request/User/UpdatePasswordRequestDTO";
 import { UserResponseDTO } from "../Core/@types/DTO/Response/User/UserResponseDTO";
+import { MultipartFile } from "@fastify/multipart";
+import { AwsS3Service } from "./AwsS3Service";
+import { IAwsS3Service } from "../Core/Interfaces/Service/IAwsS3Service";
 
 export class UserService implements IUserService {
   private _repository: IUserRepository = new UserRepository();
@@ -190,7 +193,7 @@ export class UserService implements IUserService {
         pixKey: user.pixKey,
         balance: user.balance,
         phone: user.phone,
-        profileImageUrl: "",
+        profileImageUrl: user.profileImageUrl,
       };
       response.data = data;
     }
@@ -214,7 +217,10 @@ export class UserService implements IUserService {
       return response;
     }
 
-    const filteredUsers: User[] = users.filter((user) => user.id !== id && user.pixKey != process.env.SYSTEM_PIX_SERVER_KEY);
+    const filteredUsers: User[] = users.filter(
+      (user) =>
+        user.id !== id && user.pixKey != process.env.SYSTEM_PIX_SERVER_KEY
+    );
     const mappedUsers: UserResponseDTO[] = filteredUsers.map((user) => ({
       id: user.id,
       email: user.email,
@@ -285,6 +291,53 @@ export class UserService implements IUserService {
     }
 
     response.message = "Saldo atualizado com sucesso !";
+    response.success = true;
+    return response;
+  }
+  async updateProfileImage(
+    id: string,
+    image: MultipartFile
+  ): Promise<GeneralResponse> {
+    const response: GeneralResponse = {
+      message: "",
+      success: false,
+    };
+    if (!id || !image.filename) {
+      response.message = "Dados pendentes !";
+      return response;
+    }
+
+    const user: User | null = await this._repository.findById(id);
+    if (!user) {
+      response.message = "Usuário não encontrado !";
+      return response;
+    }
+
+    const s3Instance: IAwsS3Service = new AwsS3Service();
+    let data: UpdateRequestDTO = {
+      profileImageKey: "",
+      profileImageUrl:
+        "https://th.bing.com/th/id/OIP.hcRhDT8KVqzySjYJmBhlzgHaHa?rs=1&pid=ImgDetMain",
+    };
+    if (user.profileImageKey) {
+      const isDeleted: Boolean = await s3Instance.delete(user.profileImageKey);
+      if (isDeleted) {
+        await this._repository.update(user.id, data);
+      }
+    }
+    const originalFileName: string = image.filename;
+    const imageBuffer: Buffer = await image.toBuffer();
+    const { key, location } = await s3Instance.upload(
+      imageBuffer,
+      originalFileName
+    );
+    data.profileImageUrl = location;
+    data.profileImageKey = key;
+
+    await this._repository.update(user.id, data);
+
+    response.data = { key, location };
+    response.message = "Imagem alterada com sucesso !";
     response.success = true;
     return response;
   }
