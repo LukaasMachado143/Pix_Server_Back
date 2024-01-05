@@ -28,7 +28,6 @@
   "license": "ISC",
   "dependencies": {
     "@fastify/multipart": "^6.0.0",
-    "@fastify/swagger": "^8.12.1",
     "@prisma/client": "^5.7.0",
     "aws-sdk": "^2.1520.0",
     "bcrypt": "^5.1.1",

@@ -7,9 +7,12 @@ import multipart from "@fastify/multipart";
 const server: FastifyInstance = fastify();
 server.register(fastifyCors);
 server.register(multipart);
-server.get("/", () => {
-  return { message: "api is runnung" };
-});
 server.register(UserRoutes, { prefix: "/user" });
 server.register(TransferRoutes, { prefix: "/transfer" });
-server.listen({ port: 3000 });
+server.listen({ port: 3000 }, (err, address) => {
+  if (err) {
+    console.error(err);
+    process.exit(1);
+  }
+  console.log(`Server listening at ${address}`);
+});
