@@ -4,8 +4,41 @@ import { CheckToken } from "../middlewares/checkToken";
 
 export const UserRoutes = async (fastify: FastifyInstance) => {
   const controller = new UserController();
-  fastify.post("/create", controller.createUser);
-  fastify.post("/login", controller.login);
+  fastify.post(
+    "/create",
+    {
+      schema: {
+        body: {
+          type: "object",
+          properties: {
+            email: { type: "string" },
+            name: { type: "string" },
+            pixKey: { type: "string" },
+            phone: { type: "string" },
+            password: { type: "string" },
+          },
+          required: ["email", "name", "pixKey", "phone", "password"],
+        },
+      },
+    },
+    controller.createUser
+  );
+  fastify.post(
+    "/login",
+    {
+      schema: {
+        body: {
+          type: "object",
+          properties: {
+            email: { type: "string" },
+            password: { type: "string" },
+          },
+          required: ["email", "password"],
+        },
+      },
+    },
+    controller.login
+  );
   fastify.put(
     "/update/:id",
     { preHandler: CheckToken },
