@@ -54,7 +54,16 @@ export const UserRoutes = async (fastify: FastifyInstance) => {
     { preHandler: CheckToken },
     controller.updateBalance as any
   );
-  fastify.get("/:email", { preHandler: CheckToken }, controller.getUser as any);
+  fastify.get(
+    "/:email",
+    {
+      preHandler: CheckToken,
+      schema: {
+        security: [{ bearerToken: [] }],
+      },
+    },
+    controller.getUser as any
+  );
   fastify.get(
     "/list/:id",
     { preHandler: CheckToken },
