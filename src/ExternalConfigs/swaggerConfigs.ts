@@ -3,8 +3,8 @@ const fastifySwaggeroptions = {
   exposeRoute: true,
   swagger: {
     info: {
-      title: "Sua API",
-      description: "Descrição da sua API",
+      title: "Pix Sercver API",
+      description: "Esta API foi criada com o intuito de aprendizado sobre vários conceitos e libs do node.",
       version: "1.0.0",
     },
     securityDefinitions: {

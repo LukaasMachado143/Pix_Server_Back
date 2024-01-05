@@ -54,6 +54,12 @@ export const UserRoutes = async (fastify: FastifyInstance) => {
     { preHandler: CheckToken },
     controller.updateBalance as any
   );
+  fastify.put(
+    "/updateProfileImage/:id",
+    { preHandler: CheckToken },
+    controller.updateProfileImage as any
+  );
+  
   fastify.get(
     "/:email",
     {
@@ -68,11 +74,5 @@ export const UserRoutes = async (fastify: FastifyInstance) => {
     "/list/:id",
     { preHandler: CheckToken },
     controller.getAllUsers as any
-  );
-
-  fastify.put(
-    "/updateProfileImage/:id",
-    { preHandler: CheckToken },
-    controller.updateProfileImage as any
   );
 };
