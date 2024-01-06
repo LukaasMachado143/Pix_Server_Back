@@ -197,6 +197,7 @@ export class UserService implements IUserService {
       };
       response.data = data;
     }
+    response.success = true;
     return response;
   }
   async getAllUsers(id: string): Promise<GeneralResponse> {
