@@ -6,7 +6,7 @@ import { GeneralResponse } from "../../Core/@types/GeneralResponse";
 import { LoginRequestDTO } from "../../Core/@types/DTO/Request/User/LoginRequestDTO";
 import { UpdateRequestDTO } from "../../Core/@types/DTO/Request/User/UpdateRequestDTO";
 import { UpdatePasswordRequestDTO } from "../../Core/@types/DTO/Request/User/UpdatePasswordRequestDTO";
-import { Multipart, MultipartFile } from "@fastify/multipart";
+import { MultipartFile } from "@fastify/multipart";
 
 export class UserController {
   async createUser(
