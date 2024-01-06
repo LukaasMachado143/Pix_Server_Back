@@ -41,25 +41,76 @@ export const UserRoutes = async (fastify: FastifyInstance) => {
   );
   fastify.put(
     "/update/:id",
-    { preHandler: CheckToken },
+    {
+      preHandler: CheckToken,
+      schema: {
+        body: {
+          type: "object",
+          properties: {
+            email: { type: "string" },
+            name: { type: "string" },
+            pixKey: { type: "string" },
+            phone: { type: "string" },
+            profileImageKey: { type: "string" },
+            profileImageUrl: { type: "string" },
+          },
+        },
+        security: [{ bearerToken: [] }],
+      },
+    },
     controller.update as any
   );
   fastify.put(
     "/updatePassword/:id",
-    { preHandler: CheckToken },
+    {
+      preHandler: CheckToken,
+      schema: {
+        body: {
+          type: "object",
+          properties: {
+            oldPassword: { type: "string" },
+            newPassword: { type: "string" },
+          },
+          required: ["oldPassword", "newPassword"],
+        },
+        security: [{ bearerToken: [] }],
+      },
+    },
     controller.updatePassword as any
   );
   fastify.put(
     "/updateBalance/:id/:value",
-    { preHandler: CheckToken },
+    {
+      preHandler: CheckToken,
+      schema: {
+        security: [{ bearerToken: [] }],
+      },
+    },
     controller.updateBalance as any
   );
   fastify.put(
     "/updateProfileImage/:id",
-    { preHandler: CheckToken },
+    {
+      preHandler: CheckToken,
+      // schema: {
+      //   security: [{ bearerToken: [] }],
+      //   consumes: ["multipart/form-data"],
+      //   body: {
+      //     type: "object",
+      //     properties: {
+      //       file: {
+      //         type: "string",
+      //         format: "binary",
+      //         description: "Escolha um arquivo de imagem para enviar.",
+      //       },
+      //     },
+      //     required: ["file"],
+      //   },
+      // },
+    },
     controller.updateProfileImage as any
   );
-  
+
   fastify.get(
     "/:email",
     {
@@ -72,7 +123,12 @@ export const UserRoutes = async (fastify: FastifyInstance) => {
   );
   fastify.get(
     "/list/:id",
-    { preHandler: CheckToken },
+    {
+      preHandler: CheckToken,
+      schema: {
+        security: [{ bearerToken: [] }],
+      },
+    },
     controller.getAllUsers as any
   );
 };
