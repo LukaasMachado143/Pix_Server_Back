@@ -3,7 +3,7 @@ import { GeneralResponse } from "../Core/@types/GeneralResponse";
 import { ITransferRepository } from "../Core/Interfaces/Repository/ITransferRepository";
 import { TransferRepository } from "../Database/Repositories/TransferRepository";
 import { IUserService } from "../Core/Interfaces/Service/IUserService";
-import { UserService } from "./UserService";
+import { UserService } from "./User/UserService";
 import { ITransferService } from "../Core/Interfaces/Service/ITransferService";
 import { TransferListResponseDTO } from "../Core/@types/DTO/Response/Transfer/TransferListResponseDTO";
 import { ChartHistoryAccountDTO } from "../Core/@types/DTO/Response/Transfer/ChartHistoryAccountDTO";

@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { UserService } from "../../Services/UserService";
+import { UserService } from "../../Services/User/UserService";
 import { IUserService } from "../../Core/Interfaces/Service/IUserService";
 import { User } from "@prisma/client";
 import { GeneralResponse } from "../../Core/@types/GeneralResponse";

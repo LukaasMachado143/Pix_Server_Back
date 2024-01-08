@@ -1,19 +1,19 @@
-import { IUserRepository } from "../Core/Interfaces/Repository/IUserRepository";
-import { IUserService } from "../Core/Interfaces/Service/IUserService";
+import { IUserRepository } from "../../Core/Interfaces/Repository/IUserRepository";
+import { IUserService } from "../../Core/Interfaces/Service/IUserService";
 import { User } from "@prisma/client";
-import { UserRepository } from "../Database/Repositories/UserRepository";
-import { CreatedUserResponseDTO } from "../Core/@types/DTO/Response/User/CreatedUserResponseDTO";
-import { GeneralResponse } from "../Core/@types/GeneralResponse";
+import { UserRepository } from "../../Database/Repositories/UserRepository";
+import { CreatedUserResponseDTO } from "../../Core/@types/DTO/Response/User/CreatedUserResponseDTO";
+import { GeneralResponse } from "../../Core/@types/GeneralResponse";
 import { hash, compare } from "bcrypt";
-import { LoginRequestDTO } from "../Core/@types/DTO/Request/User/LoginRequestDTO";
+import { LoginRequestDTO } from "../../Core/@types/DTO/Request/User/LoginRequestDTO";
 import { sign } from "jsonwebtoken";
-import { LoginResponseDTO } from "../Core/@types/DTO/Response/User/LoginResponseDTO";
-import { UpdateRequestDTO } from "../Core/@types/DTO/Request/User/UpdateRequestDTO";
-import { UpdatePasswordRequestDTO } from "../Core/@types/DTO/Request/User/UpdatePasswordRequestDTO";
-import { UserResponseDTO } from "../Core/@types/DTO/Response/User/UserResponseDTO";
+import { LoginResponseDTO } from "../../Core/@types/DTO/Response/User/LoginResponseDTO";
+import { UpdateRequestDTO } from "../../Core/@types/DTO/Request/User/UpdateRequestDTO";
+import { UpdatePasswordRequestDTO } from "../../Core/@types/DTO/Request/User/UpdatePasswordRequestDTO";
+import { UserResponseDTO } from "../../Core/@types/DTO/Response/User/UserResponseDTO";
 import { MultipartFile } from "@fastify/multipart";
-import { AwsS3Service } from "./AwsS3Service";
-import { IAwsS3Service } from "../Core/Interfaces/Service/IAwsS3Service";
+import { AwsS3Service } from "../AwsS3Service";
+import { IAwsS3Service } from "../../Core/Interfaces/Service/IAwsS3Service";
 
 export class UserService implements IUserService {
   private _repository: IUserRepository = new UserRepository();
@@ -25,7 +25,14 @@ export class UserService implements IUserService {
       success: false,
     };
 
-    if (!userData) {
+    if (
+      !userData ||
+      !userData.email ||
+      !userData.name ||
+      !userData.pixKey ||
+      !userData.phone ||
+      !userData.password
+    ) {
       response.message = "Dados pendentes !";
       return response;
     }
@@ -71,7 +78,7 @@ export class UserService implements IUserService {
       success: false,
     };
 
-    if (!loginData) {
+    if (!loginData || !loginData.email || !loginData.password) {
       response.message = "Dados pendentes !";
       return response;
     }
