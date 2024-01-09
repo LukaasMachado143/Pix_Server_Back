@@ -78,7 +78,7 @@ export class UserService implements IUserService {
       success: false,
     };
 
-    if (!loginData || !loginData.email || !loginData.password) {
+    if (!loginData.email || !loginData.password) {
       response.message = "Dados pendentes !";
       return response;
     }
@@ -154,7 +154,7 @@ export class UserService implements IUserService {
       success: false,
     };
 
-    if (!id || !data) {
+    if (!id || !data || !data.newPassword || !data.oldPassword) {
       response.message = "Dados pendentes !";
       return response;
     }
@@ -178,6 +178,70 @@ export class UserService implements IUserService {
     response.message = "Updated Successfully !";
     response.success = true;
     return response;
+  }
+  async updateBalance(
+    pixKey: string,
+    value: number,
+    isSender: boolean
+  ): Promise<boolean> {
+    if (!pixKey || !value || value <= 0 || isSender == null) return false;
+
+    const user: User | null = await this._repository.findByPixKey(pixKey);
+    if (!user) return false;
+
+    let newValue: number = user.balance;
+    if (isSender) newValue -= value;
+    else newValue += value;
+
+    const updatedUser: User = await this._repository.updateBalance(
+      user.id,
+      newValue
+    );
+    if (!updatedUser) return false;
+
+    return true;
+  }
+  async updateBalanceBySystem(
+    id: string,
+    value: number
+  ): Promise<GeneralResponse> {
+    const response: GeneralResponse = {
+      message: "",
+      success: false,
+    };
+
+    if (!id || !value) {
+      response.message = "Dados pendentes !";
+      return response;
+    }
+
+    const user: User | null = await this._repository.findById(id);
+    if (!user) {
+      response.message = "Usuário não encontrado !";
+      return response;
+    }
+
+    const pixKey: string = user.pixKey;
+    const isUpdatedBalance: boolean = await this.updateBalance(
+      pixKey,
+      value,
+      false
+    );
+    if (!isUpdatedBalance) {
+      response.message =
+        "Problemas ao atualizar saldo do usuário, tente novamente !";
+      return response;
+    }
+
+    response.message = "Saldo atualizado com sucesso !";
+    response.success = true;
+    return response;
+  }
+  async checkPixKey(pixKey: string): Promise<boolean> {
+    if (!pixKey) return false;
+    const user: User | null = await this._repository.findByPixKey(pixKey);
+    if (!user) return false;
+    return true;
   }
   async getUserByEmail(email: string): Promise<GeneralResponse> {
     const response: GeneralResponse = {
@@ -203,11 +267,11 @@ export class UserService implements IUserService {
         profileImageUrl: user.profileImageUrl,
       };
       response.data = data;
+      response.success = true;
     }
-    response.success = true;
     return response;
   }
-  async getAllUsers(id: string): Promise<GeneralResponse> {
+  async getAllUsersDifferentLoggedIn(id: string): Promise<GeneralResponse> {
     const response: GeneralResponse = {
       message: "",
       success: false,
@@ -241,67 +305,34 @@ export class UserService implements IUserService {
     response.success = true;
     return response;
   }
-  async checkPixKey(pixKey: string): Promise<boolean> {
-    if (!pixKey) return false;
-    const user: User | null = await this._repository.findByPixKey(pixKey);
-    if (!user) return false;
-    return true;
-  }
-  async updateBalance(
-    pixKey: string,
-    value: number,
-    isSender: boolean
-  ): Promise<boolean> {
-    if (!pixKey || !value || value <= 0 || isSender == null) return false;
 
-    const user: User | null = await this._repository.findByPixKey(pixKey);
-    if (!user) return false;
-
-    let newValue: number = user.balance;
-    if (isSender) newValue -= value;
-    else newValue += value;
-
-    const updatedUser: User = await this._repository.updateBalance(
-      user.id,
-      newValue
-    );
-    if (!updatedUser) return false;
-
-    return true;
-  }
-  async updateBalanceReal(id: string, value: number): Promise<GeneralResponse> {
+  async delete(email: string): Promise<GeneralResponse> {
     const response: GeneralResponse = {
+      code: 200,
       message: "",
       success: false,
     };
 
-    if (!id || !value) {
+    if (!email) {
       response.message = "Dados pendentes !";
       return response;
     }
 
-    const user: User | null = await this._repository.findById(id);
-    if (!user) {
+    const foundedUser: User | null = await this._repository.findByEmail(email);
+    if (!foundedUser) {
       response.message = "Usuário não encontrado !";
       return response;
     }
 
-    const pixKey: string = user.pixKey;
-    const isUpdatedBalance: boolean = await this.updateBalance(
-      pixKey,
-      value,
-      false
-    );
-    if (!isUpdatedBalance) {
-      response.message =
-        "Problemas ao atualizar saldo do usuário, tente novamente !";
-      return response;
-    }
+    const id: string = foundedUser.id;
+    await this._repository.delete(id);
 
-    response.message = "Saldo atualizado com sucesso !";
     response.success = true;
+    response.message = "Usuário deletado com sucesso !";
+    response.code = 204;
     return response;
   }
+  // Falta criar testePara esse método !
   async updateProfileImage(
     id: string,
     image: MultipartFile
@@ -310,7 +341,7 @@ export class UserService implements IUserService {
       message: "",
       success: false,
     };
-    if (!id || !image.filename) {
+    if (!id || !image || !image.filename) {
       response.message = "Dados pendentes !";
       return response;
     }

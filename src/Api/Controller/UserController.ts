@@ -115,7 +115,7 @@ export class UserController {
       const service: IUserService = new UserService();
       const id: string = request.params.id;
       const value: number = parseFloat(request.params.value);
-      const response: GeneralResponse = await service.updateBalanceReal(
+      const response: GeneralResponse = await service.updateBalanceBySystem(
         id,
         value
       );
@@ -140,6 +140,20 @@ export class UserController {
         id,
         image
       );
+      replay.send(response);
+    } catch (error) {
+      replay.send({ message: error });
+    }
+  }
+
+  async delete(
+    request: FastifyRequest<{ Params: { email: string } }>,
+    replay: FastifyReply
+  ) {
+    try {
+      const service: IUserService = new UserService();
+      const email: string = request.params.email;
+      const response: GeneralResponse = await service.delete(email);
       replay.send(response);
     } catch (error) {
       replay.send({ message: error });

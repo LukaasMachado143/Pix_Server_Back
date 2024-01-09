@@ -88,6 +88,7 @@ export const UserRoutes = async (fastify: FastifyInstance) => {
     },
     controller.updateBalance as any
   );
+  // Falta criar o schema corretamente para aparecer input de arquivos
   fastify.put(
     "/updateProfileImage/:id",
     {
@@ -123,6 +124,17 @@ export const UserRoutes = async (fastify: FastifyInstance) => {
   );
   fastify.get(
     "/list/:id",
+    {
+      preHandler: CheckToken,
+      schema: {
+        security: [{ bearerToken: [] }],
+      },
+    },
+    controller.getAllUsers as any
+  );
+
+  fastify.delete(
+    "/delete/:email",
     {
       preHandler: CheckToken,
       schema: {

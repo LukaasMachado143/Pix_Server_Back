@@ -14,8 +14,11 @@ export interface IUserService {
     data: UpdatePasswordRequestDTO
   ): Promise<GeneralResponse>;
   getUserByEmail(email: string): Promise<GeneralResponse>;
-  getAllUsers(id: string): Promise<GeneralResponse>;
-  updateBalanceReal(pixKey: string, value: number): Promise<GeneralResponse>;
+  getAllUsersDifferentLoggedIn(id: string): Promise<GeneralResponse>;
+  updateBalanceBySystem(
+    pixKey: string,
+    value: number
+  ): Promise<GeneralResponse>;
   checkPixKey(pixKey: string): Promise<boolean>;
   updateBalance(
     pixKey: string,
@@ -26,4 +29,5 @@ export interface IUserService {
     id: string,
     iamge: MultipartFile
   ): Promise<GeneralResponse>;
+  delete(email: string): Promise<GeneralResponse>;
 }
