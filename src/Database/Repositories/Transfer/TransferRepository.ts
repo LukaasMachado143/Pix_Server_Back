@@ -1,6 +1,6 @@
 import { Transfer } from "@prisma/client";
-import { prisma } from "../config/dbConfigs";
-import { ITransferRepository } from "../../Core/Interfaces/Repository/ITransferRepository";
+import { prisma } from "../../config/dbConfigs";
+import { ITransferRepository } from "../../../Core/Interfaces/Repository/ITransferRepository";
 
 export class TransferRepository implements ITransferRepository {
   async getAllTransfers(): Promise<Transfer[]> {

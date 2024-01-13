@@ -1,7 +1,7 @@
 import { Transfer } from "@prisma/client";
 import { GeneralResponse } from "../../Core/@types/GeneralResponse";
 import { ITransferRepository } from "../../Core/Interfaces/Repository/ITransferRepository";
-import { TransferRepository } from "../../Database/Repositories/TransferRepository";
+import { TransferRepository } from "../../Database/Repositories/Transfer/TransferRepository";
 import { IUserService } from "../../Core/Interfaces/Service/IUserService";
 import { UserService } from "../User/UserService";
 import { ITransferService } from "../../Core/Interfaces/Service/ITransferService";
