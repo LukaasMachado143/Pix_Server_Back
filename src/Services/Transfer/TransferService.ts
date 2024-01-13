@@ -1,12 +1,12 @@
 import { Transfer } from "@prisma/client";
-import { GeneralResponse } from "../Core/@types/GeneralResponse";
-import { ITransferRepository } from "../Core/Interfaces/Repository/ITransferRepository";
-import { TransferRepository } from "../Database/Repositories/TransferRepository";
-import { IUserService } from "../Core/Interfaces/Service/IUserService";
-import { UserService } from "./User/UserService";
-import { ITransferService } from "../Core/Interfaces/Service/ITransferService";
-import { TransferListResponseDTO } from "../Core/@types/DTO/Response/Transfer/TransferListResponseDTO";
-import { ChartHistoryAccountDTO } from "../Core/@types/DTO/Response/Transfer/ChartHistoryAccountDTO";
+import { GeneralResponse } from "../../Core/@types/GeneralResponse";
+import { ITransferRepository } from "../../Core/Interfaces/Repository/ITransferRepository";
+import { TransferRepository } from "../../Database/Repositories/TransferRepository";
+import { IUserService } from "../../Core/Interfaces/Service/IUserService";
+import { UserService } from "../User/UserService";
+import { ITransferService } from "../../Core/Interfaces/Service/ITransferService";
+import { TransferListResponseDTO } from "../../Core/@types/DTO/Response/Transfer/TransferListResponseDTO";
+import { ChartHistoryAccountDTO } from "../../Core/@types/DTO/Response/Transfer/ChartHistoryAccountDTO";
 
 export class TransferService implements ITransferService {
   private _repository: ITransferRepository = new TransferRepository();
@@ -29,7 +29,7 @@ export class TransferService implements ITransferService {
       return response;
     }
 
-    const isExistSender: Promise<boolean> = this._userService.checkPixKey(
+    const isExistSender: boolean = await this._userService.checkPixKey(
       data.senderPixKey
     );
     if (!isExistSender) {
@@ -37,7 +37,7 @@ export class TransferService implements ITransferService {
       return response;
     }
 
-    const isExistReceiver: Promise<boolean> = this._userService.checkPixKey(
+    const isExistReceiver: boolean = await this._userService.checkPixKey(
       data.receiverPixKey
     );
     if (!isExistReceiver) {
@@ -109,7 +109,7 @@ export class TransferService implements ITransferService {
         return { date: transfer.date, value: transfer.value };
       }
     );
-    response.message = "sended";
+    response.message = type;
     response.data = mappedTransfers;
     response.success = true;
 

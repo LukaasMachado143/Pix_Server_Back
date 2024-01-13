@@ -2,7 +2,7 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import { GeneralResponse } from "../../Core/@types/GeneralResponse";
 import { Transfer } from "@prisma/client";
 import { ITransferService } from "../../Core/Interfaces/Service/ITransferService";
-import { TransferService } from "../../Services/TransferService";
+import { TransferService } from "../../Services/Transfer/TransferService";
 
 export class TransferController {
   async createTransfer(
