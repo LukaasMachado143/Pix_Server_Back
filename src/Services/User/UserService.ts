@@ -1,7 +1,7 @@
 import { IUserRepository } from "../../Core/Interfaces/Repository/IUserRepository";
 import { IUserService } from "../../Core/Interfaces/Service/IUserService";
 import { User } from "@prisma/client";
-import { UserRepository } from "../../Database/Repositories/UserRepository";
+import { UserRepository } from "../../Database/Repositories/User/UserRepository";
 import { CreatedUserResponseDTO } from "../../Core/@types/DTO/Response/User/CreatedUserResponseDTO";
 import { GeneralResponse } from "../../Core/@types/GeneralResponse";
 import { hash, compare } from "bcrypt";
