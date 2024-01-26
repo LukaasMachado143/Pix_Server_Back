@@ -1,5 +1,5 @@
 import fastify, { FastifyInstance } from "fastify";
-import { UserRoutes } from "./Api/Routes/UserRoutes";
+import { UserRoutes } from "./Api/Routes/User/UserRoutes";
 import fastifyCors from "@fastify/cors";
 import { TransferRoutes } from "./Api/Routes/TransferRoutes";
 import multipart from "@fastify/multipart";

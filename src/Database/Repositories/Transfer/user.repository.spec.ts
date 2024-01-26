@@ -3,7 +3,6 @@ import { ITransferRepository } from "../../../Core/Interfaces/Repository/ITransf
 import { TransferRepository } from "./TransferRepository";
 import { Transfer } from "@prisma/client";
 import { v4 as uuid } from "uuid";
-import { AnyArn } from "aws-sdk/clients/groundstation";
 
 let repository: ITransferRepository;
 beforeAll(() => {
