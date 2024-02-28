@@ -12,12 +12,9 @@ import {
 
 const app: FastifyInstance = fastify();
 
+app.register(fastifyCors);
 app.register(fastifySwagger as any, fastifySwaggeroptions);
 app.register(fastifySwaggerUI as any, fastifySwaggerUIOptions);
-app.register(fastifyCors, {
-  origin: ['https://pix-server-front.vercel.app'],
-  methods: ['GET', 'PUT', 'POST', 'DELETE'],
-});
 app.register(multipart);
 app.register(UserRoutes, { prefix: "/user" });
 app.register(TransferRoutes, { prefix: "/transfer" });
