@@ -15,10 +15,8 @@ const app: FastifyInstance = fastify();
 app.register(fastifySwagger as any, fastifySwaggeroptions);
 app.register(fastifySwaggerUI as any, fastifySwaggerUIOptions);
 app.register(fastifyCors, {
-  origin: true,
+  origin: ['https://pix-server-front.vercel.app'],
   methods: ['GET', 'PUT', 'POST', 'DELETE'],
-  allowedHeaders: '*',
-
 });
 app.register(multipart);
 app.register(UserRoutes, { prefix: "/user" });
