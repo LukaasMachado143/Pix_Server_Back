@@ -17,6 +17,7 @@ app.register(fastifySwaggerUI as any, fastifySwaggerUIOptions);
 app.register(fastifyCors, {
   origin: '*',
   exposedHeaders: '*',
+  methods: "*",
 });
 app.register(multipart);
 app.register(UserRoutes, { prefix: "/user" });
