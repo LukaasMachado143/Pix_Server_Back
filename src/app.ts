@@ -15,9 +15,10 @@ const app: FastifyInstance = fastify();
 app.register(fastifySwagger as any, fastifySwaggeroptions);
 app.register(fastifySwaggerUI as any, fastifySwaggerUIOptions);
 app.register(fastifyCors, {
-  origin: '*',
-  exposedHeaders: '*',
-  methods: "*",
+  origin: true,
+  methods: ['GET', 'PUT', 'POST', 'DELETE'],
+  allowedHeaders: '*',
+
 });
 app.register(multipart);
 app.register(UserRoutes, { prefix: "/user" });
