@@ -18,4 +18,11 @@ app.register(fastifySwaggerUI as any, fastifySwaggerUIOptions);
 app.register(multipart);
 app.register(UserRoutes, { prefix: "/user" });
 app.register(TransferRoutes, { prefix: "/transfer" });
-export { app };
+app.listen({ port: 3000 }, (err, address) => {
+  if (err) {
+    console.error(err);
+    process.exit(1);
+  }
+  console.log(`Server listening at ${address}`);
+});
+// export { app };
